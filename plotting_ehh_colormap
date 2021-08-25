@@ -1,6 +1,6 @@
 plotHaplotypes <- function(filename)
 {
-  #filename <- "outfile.rs7215219.ihs.out";
+  #filename <- "outfile_1.eeh.Locus2221.out";
   
   filename.der <- paste(filename,".der.colormap",sep="")
   filename.anc <- paste(filename,".anc.colormap",sep="")
