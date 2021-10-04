@@ -1,3 +1,5 @@
 screen #start
+ctrl+a and +d #detach screen
 screen -ls #lists the running screens
+screen -r #back to screen
 screen -r <NUMBER_OF_THE_SCREEN> #then press ctrl+a, press k and then y #killing the screen
