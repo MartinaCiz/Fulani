@@ -93,7 +93,6 @@ for (p2 in 1:length(Populations_List2)) {
 		cr <- calc_candidate_regions(wg.xpehh, ignore_sign= T, window_size= 1E4, threshold= thres, pval= T)
 		genes <- find_genes(cr)
 		paste(genes,collapse=' ')
-		wr
 		
 		### XPEHH pop1 vs. pop2
 		# pdf(file= paste0("rehh_Plots/Edited_XPEHH_plot/xpehh.plot_",pop1,"_vs_",pop2,".pdf"),height= 5,width= 14)
