@@ -10,11 +10,11 @@ dat<-read.table(filein,as.is=T,head=T,comment.char="")
 find_genes <- function(x) {
 	cat("Chr","start-end Position","","Maximum:","Genes",'\n')
 	genes <- c()
-	for (g in 1:nrow(cr)) {
-		chr <- levels(factor(cr$CHR[g]))
-		maximum <- cr$MAX_MRK[g]
-		min.pos <- as.integer(cr$START[g])
-		max.pos <- as.integer(cr$END[g])
+	for (g in 1:nrow(cr_wg.ihs.pop1)) {
+		chr <- levels(factor(cr_wg.ihs.pop1$CHR[g]))
+		maximum <- cr_wg.ihs.pop1$MAX_MRK[g]
+		min.pos <- as.integer(cr_wg.ihs.pop1$START[g])
+		max.pos <- as.integer(cr_wg.ihs.pop1$END[g])
 		xx2 <- dat[dat[,"chrom"]==paste("chr",chr,sep="") & dat[,"cdsStart"]<max.pos & dat[,"cdsEnd"] >min.pos,]
 		cat(chr,paste0(min.pos,'-',max.pos),maximum,':',xx2$name2,'\n')
 		if (g==1) { genes <- append(genes,c(paste0(xx2$chr,":"),xx2$name2)) }
@@ -28,7 +28,8 @@ find_genes <- function(x) {
 
 
 ### iHS for pop1
-Populations_List1 = c("Wodaabe", "Western", "Eastern")
+Populations_List1 = c("BurkinaFaso_Fulani_Banfora","BurkinaFaso_Fulani_Tindangou","BurkinaFaso_Fulani_Ziniare","Cameroon_Fulani_Tcheboua","Chad_Fulani_Bongor","Chad_Fulani_Linia","Guinea_Fulani","Mali_Fulani_Diafarabe","Mali_Fulani_InnerDelta","Mauritania_Fulani_Assaba","Niger_Fulani_Abalak","Niger_Fulani_Ader","Niger_Fulani_Balatungur","Niger_Fulani_Diffa","Niger_Fulani_Zinder","Senegal_Fulani_Linguere")
+#Populations_List1 = c("Wodaabe", "Western", "Eastern")
 
 for (p1 in 1:length(Populations_List1)) {
 	pop1=Populations_List1[[p1]]
@@ -43,15 +44,16 @@ for (p1 in 1:length(Populations_List1)) {
 	thres <- 5
 	cat('\n',pop1,'iHS\n')
 	#
-	cr <- calc_candidate_regions(wg.ihs.pop1, ignore_sign= T, window_size= 1E4, threshold=thres, pval=T)
-	genes <- find_genes(cr)
+	cr_wg.ihs.pop1 <- calc_candidate_regions(wg.ihs.pop1, ignore_sign= T, window_size= 1E4, threshold=thres, pval=T)
+	genes <- find_genes(cr_wg.ihs.pop1)
 	paste(genes,collapse=' ')
 	
 	# pdf(file= paste0("rehh_Plots/Edited_iHS_plots/",pop1,"_iHS.plot.pdf"), height=30, width=40, units='cm', res=300)
 	png(paste0("rehh_Plots/Edited_iHS_plots/",pop1,"_iHS.plot.png"), height=30, width=50, units='cm', res=500)
 	par(mfrow=c(2,1))
-	manhattanplot(wg.ihs.pop1, main=paste(genes, collapse=" "), pval= T, pch= 20, threshold= c(-thres,thres), cex= 0.6, adj= 0.5, font.main=4)
-	title(paste0("iHS ", pop1), adj=0.01, font.main=2)
+	manhattanplot(wg.ihs.pop1, sub=paste(genes, collapse=" "), pval= T, pch= 20, threshold= c(-thres,thres), cex= 0.6, adj= 0.5, font.main=4,
+		cr=cr_wg.ihs.pop1, cr.lab.cex=0)
+	title(paste0("Adjusted p-values of ", pop1), adj=0.01, font.main=2)
 	manhattanplot(wg.ihs.pop1, pval= F, pch= 20)
 	title(paste0("iHS score for ",pop1), adj= 0.01, font.main=2)
 	dev.off()
@@ -103,5 +105,4 @@ for (p1 in 1:length(Populations_List1)) {
 		# manhattanplot(wg.rsb, pval= T,  main= paste0("Rsb score for ",pop1," vs ",pop2), threshold= c(-5,5))
 		# dev.off()
 #}
-
 
